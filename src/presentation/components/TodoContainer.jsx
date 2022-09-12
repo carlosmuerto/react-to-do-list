@@ -1,9 +1,13 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Route, Routes } from 'react-router-dom';
 
 import TodosList from './TodosList';
 import Header from './Header';
 import InputTodo from './InputTodo';
+import Navbar from './Navbar';
+import About from '../pages/About';
+import NotMatch from '../pages/NotMatch';
 
 class TodoContainer extends React.Component {
   constructor(props) {
@@ -54,18 +58,30 @@ class TodoContainer extends React.Component {
   render() {
     const { todos } = this.state;
     return (
-      <div className="container">
-        <div className="inner">
-          <Header />
-          <InputTodo handleSubmit={this.addTodoItem} />
-          <TodosList
-            todos={todos}
-            handleChangeProps={this.handleChange}
-            deleteTodoProps={this.delTodo}
-            setUpdate={this.setUpdate}
+      <>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <div className="container">
+                <div className="inner">
+                  <Header />
+                  <InputTodo handleSubmit={this.addTodoItem} />
+                  <TodosList
+                    todos={todos}
+                    handleChangeProps={this.handleChange}
+                    deleteTodoProps={this.delTodo}
+                    setUpdate={this.setUpdate}
+                  />
+                </div>
+              </div>
+            )}
           />
-        </div>
-      </div>
+          <Route path="about/*" element={<About />} />
+          <Route path="*" element={<NotMatch />} />
+        </Routes>
+      </>
     );
   }
 }
