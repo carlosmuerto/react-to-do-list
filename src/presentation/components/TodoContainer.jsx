@@ -8,26 +8,13 @@ import InputTodo from './InputTodo';
 class TodoContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      todos: [
-        {
-          id: uuidv4(),
-          title: 'Setup development environment',
-          completed: true,
-        },
-        {
-          id: uuidv4(),
-          title: 'Develop website and add content',
-          completed: false,
-        },
-        {
-          id: uuidv4(),
-          title: 'Deploy to live server',
-          completed: false,
-        },
-      ],
-    };
+    this.state = { todos: JSON.parse(localStorage.getItem('todoList')) };
   }
+
+  savelocalStorage = () => {
+    const { todos } = this.state;
+    localStorage.setItem('todoList', JSON.stringify(todos));
+  };
 
   handleChange = (id) => {
     this.setState((prevState) => ({
@@ -35,13 +22,13 @@ class TodoContainer extends React.Component {
         ...todo,
         completed: todo.id === id ? !todo.completed : todo.completed,
       })),
-    }));
+    }), this.savelocalStorage);
   };
 
   delTodo = (id) => {
     this.setState((prevState) => ({
       todos: prevState.todos.filter((todo) => (todo.id !== id)),
-    }));
+    }), this.savelocalStorage);
   };
 
   addTodoItem = (title) => {
@@ -52,7 +39,7 @@ class TodoContainer extends React.Component {
     };
     this.setState((prevState) => ({
       todos: [...prevState.todos, newTodo],
-    }));
+    }), this.savelocalStorage);
   };
 
   setUpdate = (updatedTitle, id) => {
@@ -61,7 +48,7 @@ class TodoContainer extends React.Component {
         ...todo,
         title: todo.id === id ? updatedTitle : todo.title,
       })),
-    }));
+    }), this.savelocalStorage);
   };
 
   render() {
